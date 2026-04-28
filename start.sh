@@ -36,17 +36,21 @@ if [ ! -d "venv" ]; then
 else
     echo -e "${GREEN}✓ Virtual environment already exists.${RESET}"
 fi
-source venv/bin/activate
+
+# Use venv binaries directly — works even inside conda or other envs
+PYTHON="./venv/bin/python"
+PIP="./venv/bin/pip"
+PLAYWRIGHT="./venv/bin/playwright"
 echo ""
 
 # ── Step 3: Install dependencies ─────────────────────────────────────────────
 echo -e "${BOLD}[3/5] Installing dependencies...${RESET}"
-pip install -q --upgrade pip
-pip install -q -r requirements.txt
+$PIP install -q --upgrade pip
+$PIP install -q -r requirements.txt
 echo -e "${GREEN}✓ Python packages installed.${RESET}"
 
 echo -e "Installing Playwright browsers..."
-playwright install chromium --quiet
+$PLAYWRIGHT install chromium --quiet
 echo -e "${GREEN}✓ Playwright Chromium installed.${RESET}"
 echo ""
 
@@ -130,19 +134,19 @@ case "$RUN_CHOICE" in
         if [ "$RUN_CHOICE" = "3" ]; then
             echo ""
             echo -e "${GREEN}Seeding Knowledge Graph...${RESET}"
-            python scripts/seed_and_view_graph.py
+            $PYTHON scripts/seed_and_view_graph.py
         fi
 
         echo -ne "\n   ${BOLD}Enter the WhatsApp contact name to monitor:${RESET} "
         read -r CONTACT
         echo ""
         echo -e "${GREEN}Starting agent for \"$CONTACT\"...${RESET}"
-        python run.py --contact "$CONTACT" $HEADFUL_FLAG
+        $PYTHON run.py --contact "$CONTACT" $HEADFUL_FLAG
         ;;
     2)
         echo ""
         echo -e "${GREEN}Seeding Knowledge Graph...${RESET}"
-        python scripts/seed_and_view_graph.py
+        $PYTHON scripts/seed_and_view_graph.py
         ;;
     4)
         echo -e "${YELLOW}Exiting. Run ${BOLD}./start.sh${RESET}${YELLOW} again when ready.${RESET}"
