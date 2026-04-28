@@ -50,8 +50,9 @@ $PIP install -q -r requirements.txt
 echo -e "${GREEN}✓ Python packages installed.${RESET}"
 
 echo -e "Installing Playwright browsers..."
-$PLAYWRIGHT install chromium --quiet
+$PLAYWRIGHT install chromium 2>&1 | tail -1
 echo -e "${GREEN}✓ Playwright Chromium installed.${RESET}"
+
 echo ""
 
 # ── Step 4: API Key configuration ────────────────────────────────────────────
