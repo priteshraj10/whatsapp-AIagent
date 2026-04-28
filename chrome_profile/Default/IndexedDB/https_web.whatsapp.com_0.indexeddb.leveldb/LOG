@@ -1,0 +1,169 @@
+2026/04/28-05:36:22.389 1cdc77 Reusing MANIFEST /Users/priteshraj/Downloads/Agent/chrome_profile/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/04/28-05:36:22.390 1cdc77 Recovering log #4403
+2026/04/28-05:36:22.402 1cdc77 Reusing old log /Users/priteshraj/Downloads/Agent/chrome_profile/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/004403.log 
+2026/04/28-05:36:33.471 1cdc77 Level-0 table #4427: started
+2026/04/28-05:36:33.504 1cdc77 Level-0 table #4427: 1103534 bytes OK
+2026/04/28-05:36:33.513 1cdc77 Delete type=0 #4403
+2026/04/28-05:36:33.604 1cdc71 Compacting 1@0 + 0@1 files
+2026/04/28-05:36:33.623 1cdc71 Generated table #4428@0: 22921 keys, 325461 bytes
+2026/04/28-05:36:33.628 1cdc71 Generated table #4429@0: 2068 keys, 145851 bytes
+2026/04/28-05:36:33.628 1cdc71 Compacted 1@0 + 0@1 files => 471312 bytes
+2026/04/28-05:36:33.634 1cdc71 compacted to: files[ 0 2 21 0 0 0 0 ]
+2026/04/28-05:36:33.707 1cdc77 Compacting 1@1 + 10@2 files
+2026/04/28-05:36:33.772 1cdc77 Generated table #4430@1: 26889 keys, 2237163 bytes
+2026/04/28-05:36:33.832 1cdc77 Generated table #4431@1: 24254 keys, 2240141 bytes
+2026/04/28-05:36:33.869 1cdc77 Generated table #4432@1: 9116 keys, 2131539 bytes
+2026/04/28-05:36:33.904 1cdc77 Generated table #4433@1: 3476 keys, 2122447 bytes
+2026/04/28-05:36:33.973 1cdc77 Generated table #4434@1: 74684 keys, 2214773 bytes
+2026/04/28-05:36:34.059 1cdc77 Generated table #4435@1: 93003 keys, 2242308 bytes
+2026/04/28-05:36:34.242 1cdc77 Generated table #4436@1: 92809 keys, 2241367 bytes
+2026/04/28-05:36:34.324 1cdc77 Generated table #4437@1: 93161 keys, 2242610 bytes
+2026/04/28-05:36:34.422 1cdc77 Generated table #4438@1: 93262 keys, 2242660 bytes
+2026/04/28-05:36:34.446 1cdc77 Generated table #4439@1: 14884 keys, 657850 bytes
+2026/04/28-05:36:34.446 1cdc77 Compacted 1@1 + 10@2 files => 20572858 bytes
+2026/04/28-05:36:34.448 1cdc77 compacted to: files[ 0 1 21 0 0 0 0 ]
+2026/04/28-05:36:34.449 1cdc77 Delete type=2 #4427
+2026/04/28-05:36:34.582 1cdc77 Compacting 1@1 + 11@2 files
+2026/04/28-05:36:34.671 1cdc77 Generated table #4440@1: 87139 keys, 2238926 bytes
+2026/04/28-05:36:34.740 1cdc77 Generated table #4441@1: 95426 keys, 2247441 bytes
+2026/04/28-05:36:34.809 1cdc77 Generated table #4442@1: 97191 keys, 2248901 bytes
+2026/04/28-05:36:34.900 1cdc77 Generated table #4443@1: 101479 keys, 2253782 bytes
+2026/04/28-05:36:34.964 1cdc77 Generated table #4444@1: 101261 keys, 2254371 bytes
+2026/04/28-05:36:35.025 1cdc77 Generated table #4445@1: 40271 keys, 2336857 bytes
+2026/04/28-05:36:35.084 1cdc77 Generated table #4446@1: 23654 keys, 2179535 bytes
+2026/04/28-05:36:35.130 1cdc77 Generated table #4447@1: 1925 keys, 2143587 bytes
+2026/04/28-05:36:35.155 1cdc77 Generated table #4448@1: 1578 keys, 2133166 bytes
+2026/04/28-05:36:35.174 1cdc77 Generated table #4449@1: 1631 keys, 2134045 bytes
+2026/04/28-05:36:35.178 1cdc77 Generated table #4450@1: 214 keys, 201056 bytes
+2026/04/28-05:36:35.178 1cdc77 Compacted 1@1 + 11@2 files => 22371667 bytes
+2026/04/28-05:36:35.181 1cdc77 compacted to: files[ 0 0 21 0 0 0 0 ]
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4416
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4417
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4429
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4415
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4423
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4422
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4420
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4421
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4419
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4418
+2026/04/28-05:36:35.181 1cdc77 Delete type=2 #4424
+2026/04/28-05:36:35.750 1cdc77 Level-0 table #4452: started
+2026/04/28-05:36:35.778 1cdc77 Level-0 table #4452: 1374351 bytes OK
+2026/04/28-05:36:35.780 1cdc77 Delete type=2 #4414
+2026/04/28-05:36:35.780 1cdc77 Delete type=2 #4428
+2026/04/28-05:36:35.780 1cdc77 Delete type=2 #4389
+2026/04/28-05:36:35.780 1cdc77 Delete type=2 #4410
+2026/04/28-05:36:35.780 1cdc77 Delete type=2 #4411
+2026/04/28-05:36:35.780 1cdc77 Delete type=2 #4407
+2026/04/28-05:36:35.782 1cdc77 Delete type=2 #4413
+2026/04/28-05:36:35.782 1cdc77 Delete type=2 #4412
+2026/04/28-05:36:35.782 1cdc77 Delete type=0 #4426
+2026/04/28-05:36:35.782 1cdc77 Delete type=2 #4391
+2026/04/28-05:36:35.782 1cdc77 Delete type=2 #4408
+2026/04/28-05:36:35.783 1cdc77 Delete type=2 #4409
+2026/04/28-05:36:35.783 1cdc77 Delete type=2 #4390
+2026/04/28-05:36:35.881 1cdc77 Compacting 1@0 + 0@1 files
+2026/04/28-05:36:35.904 1cdc77 Generated table #4453@0: 24409 keys, 609304 bytes
+2026/04/28-05:36:35.908 1cdc77 Generated table #4454@0: 1396 keys, 123427 bytes
+2026/04/28-05:36:35.908 1cdc77 Compacted 1@0 + 0@1 files => 732731 bytes
+2026/04/28-05:36:35.933 1cdc77 compacted to: files[ 0 2 21 0 0 0 0 ]
+2026/04/28-05:36:35.977 1cdc77 Compacting 1@1 + 10@2 files
+2026/04/28-05:36:36.022 1cdc77 Generated table #4455@1: 26860 keys, 2236646 bytes
+2026/04/28-05:36:36.066 1cdc77 Generated table #4456@1: 24043 keys, 2238971 bytes
+2026/04/28-05:36:36.090 1cdc77 Generated table #4457@1: 9779 keys, 2140764 bytes
+2026/04/28-05:36:36.112 1cdc77 Generated table #4458@1: 3473 keys, 2118848 bytes
+2026/04/28-05:36:36.152 1cdc77 Generated table #4459@1: 71362 keys, 2211952 bytes
+2026/04/28-05:36:36.203 1cdc77 Generated table #4460@1: 93092 keys, 2242725 bytes
+2026/04/28-05:36:36.254 1cdc77 Generated table #4461@1: 92800 keys, 2241124 bytes
+2026/04/28-05:36:36.298 1cdc77 Generated table #4462@1: 93309 keys, 2242898 bytes
+2026/04/28-05:36:36.348 1cdc77 Generated table #4463@1: 93237 keys, 2243806 bytes
+2026/04/28-05:36:36.364 1cdc77 Generated table #4464@1: 18805 keys, 760356 bytes
+2026/04/28-05:36:36.364 1cdc77 Compacted 1@1 + 10@2 files => 20678090 bytes
+2026/04/28-05:36:36.366 1cdc77 compacted to: files[ 0 1 21 0 0 0 0 ]
+2026/04/28-05:36:36.366 1cdc77 Delete type=2 #4438
+2026/04/28-05:36:36.366 1cdc77 Delete type=2 #4439
+2026/04/28-05:36:36.366 1cdc77 Delete type=2 #4454
+2026/04/28-05:36:36.366 1cdc77 Delete type=2 #4452
+2026/04/28-05:36:36.366 1cdc77 Delete type=2 #4437
+2026/04/28-05:36:36.366 1cdc77 Delete type=2 #4436
+2026/04/28-05:36:36.366 1cdc77 Delete type=2 #4434
+2026/04/28-05:36:36.367 1cdc77 Delete type=2 #4435
+2026/04/28-05:36:36.367 1cdc77 Delete type=2 #4431
+2026/04/28-05:36:36.367 1cdc77 Delete type=2 #4430
+2026/04/28-05:36:36.367 1cdc77 Delete type=2 #4432
+2026/04/28-05:36:36.367 1cdc77 Delete type=2 #4433
+2026/04/28-05:36:36.583 1cdc77 Compacting 1@1 + 10@2 files
+2026/04/28-05:36:36.642 1cdc77 Generated table #4465@1: 86041 keys, 2236385 bytes
+2026/04/28-05:36:36.685 1cdc77 Generated table #4466@1: 95434 keys, 2247612 bytes
+2026/04/28-05:36:36.730 1cdc77 Generated table #4467@1: 96933 keys, 2248550 bytes
+2026/04/28-05:36:36.798 1cdc77 Generated table #4468@1: 101479 keys, 2254245 bytes
+2026/04/28-05:36:36.845 1cdc77 Generated table #4469@1: 101261 keys, 2254420 bytes
+2026/04/28-05:36:36.886 1cdc77 Generated table #4470@1: 42773 keys, 2339020 bytes
+2026/04/28-05:36:36.920 1cdc77 Generated table #4471@1: 28254 keys, 2185198 bytes
+2026/04/28-05:36:36.938 1cdc77 Generated table #4472@1: 1910 keys, 2145222 bytes
+2026/04/28-05:36:36.976 1cdc77 Generated table #4473@1: 1726 keys, 2136724 bytes
+2026/04/28-05:36:37.007 1cdc77 Generated table #4474@1: 1499 keys, 2138587 bytes
+2026/04/28-05:36:37.010 1cdc77 Generated table #4475@1: 228 keys, 195066 bytes
+2026/04/28-05:36:37.010 1cdc77 Compacted 1@1 + 10@2 files => 22381029 bytes
+2026/04/28-05:36:37.012 1cdc77 compacted to: files[ 0 0 22 0 0 0 0 ]
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4449
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4448
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4440
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4441
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4443
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4442
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4446
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4447
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4453
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4445
+2026/04/28-05:36:37.013 1cdc77 Delete type=2 #4444
+2026/04/28-05:36:37.055 1cdc77 Level-0 table #4477: started
+2026/04/28-05:36:37.081 1cdc77 Level-0 table #4477: 1045051 bytes OK
+2026/04/28-05:36:37.084 1cdc77 Delete type=0 #4451
+2026/04/28-05:36:37.120 1cdc77 Compacting 1@0 + 0@1 files
+2026/04/28-05:36:37.127 1cdc77 Generated table #4478@0: 13255 keys, 180560 bytes
+2026/04/28-05:36:37.133 1cdc77 Generated table #4479@0: 4176 keys, 282260 bytes
+2026/04/28-05:36:37.133 1cdc77 Compacted 1@0 + 0@1 files => 462820 bytes
+2026/04/28-05:36:37.136 1cdc77 compacted to: files[ 0 2 22 0 0 0 0 ]
+2026/04/28-05:36:37.136 1cdc77 Delete type=2 #4477
+2026/04/28-05:36:37.703 1cdc77 Compacting 1@1 + 7@2 files
+2026/04/28-05:36:37.753 1cdc77 Generated table #4480@1: 86385 keys, 2237547 bytes
+2026/04/28-05:36:37.804 1cdc77 Generated table #4481@1: 95431 keys, 2247459 bytes
+2026/04/28-05:36:37.851 1cdc77 Generated table #4482@1: 97027 keys, 2249537 bytes
+2026/04/28-05:36:37.902 1cdc77 Generated table #4483@1: 101479 keys, 2254114 bytes
+2026/04/28-05:36:37.956 1cdc77 Generated table #4484@1: 101261 keys, 2254440 bytes
+2026/04/28-05:36:38.016 1cdc77 Generated table #4485@1: 42641 keys, 2339100 bytes
+2026/04/28-05:36:38.062 1cdc77 Generated table #4486@1: 28014 keys, 2178164 bytes
+2026/04/28-05:36:38.062 1cdc77 Compacted 1@1 + 7@2 files => 15760361 bytes
+2026/04/28-05:36:38.067 1cdc77 compacted to: files[ 0 1 22 0 0 0 0 ]
+2026/04/28-05:36:38.067 1cdc77 Delete type=2 #4467
+2026/04/28-05:36:38.067 1cdc77 Delete type=2 #4466
+2026/04/28-05:36:38.068 1cdc77 Delete type=2 #4470
+2026/04/28-05:36:38.068 1cdc77 Delete type=2 #4471
+2026/04/28-05:36:38.068 1cdc77 Delete type=2 #4465
+2026/04/28-05:36:38.068 1cdc77 Delete type=2 #4468
+2026/04/28-05:36:38.068 1cdc77 Delete type=2 #4469
+2026/04/28-05:36:38.068 1cdc77 Delete type=2 #4478
+2026/04/28-05:36:38.337 1cdc77 Compacting 1@1 + 9@2 files
+2026/04/28-05:36:38.388 1cdc77 Generated table #4487@1: 24047 keys, 2240228 bytes
+2026/04/28-05:36:38.416 1cdc77 Generated table #4488@1: 9779 keys, 2140764 bytes
+2026/04/28-05:36:38.449 1cdc77 Generated table #4489@1: 3473 keys, 2118848 bytes
+2026/04/28-05:36:38.512 1cdc77 Generated table #4490@1: 71362 keys, 2211952 bytes
+2026/04/28-05:36:38.561 1cdc77 Generated table #4491@1: 93092 keys, 2242725 bytes
+2026/04/28-05:36:38.605 1cdc77 Generated table #4492@1: 92800 keys, 2241124 bytes
+2026/04/28-05:36:38.654 1cdc77 Generated table #4493@1: 93309 keys, 2242898 bytes
+2026/04/28-05:36:38.701 1cdc77 Generated table #4494@1: 93237 keys, 2243806 bytes
+2026/04/28-05:36:38.715 1cdc77 Generated table #4495@1: 18805 keys, 760537 bytes
+2026/04/28-05:36:38.715 1cdc77 Compacted 1@1 + 9@2 files => 18442882 bytes
+2026/04/28-05:36:38.717 1cdc77 compacted to: files[ 0 0 22 0 0 0 0 ]
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4461
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4460
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4462
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4463
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4464
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4458
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4459
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4457
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4456
+2026/04/28-05:36:38.717 1cdc77 Delete type=2 #4479

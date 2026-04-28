@@ -1,0 +1,8 @@
+.env
+__pycache__/
+venv/
+screenshots/
+context/
+user_data/
+fb_user_data/
+whatsapp_user_data/

@@ -1,0 +1,5 @@
+2026/04/28-05:36:21.756 1cdc71 Reusing MANIFEST /Users/priteshraj/Downloads/Agent/chrome_profile/Default/shared_proto_db/MANIFEST-000001
+2026/04/28-05:36:21.756 1cdc71 Recovering log #3
+2026/04/28-05:36:21.757 1cdc71 (ignoring error) /Users/priteshraj/Downloads/Agent/chrome_profile/Default/shared_proto_db/000003.log: dropping 8314 bytes; Corruption: checksum mismatch
+2026/04/28-05:36:21.757 1cdc71 (ignoring error) /Users/priteshraj/Downloads/Agent/chrome_profile/Default/shared_proto_db/000003.log: dropping 31 bytes; Corruption: missing start of fragmented record(2)
+2026/04/28-05:36:21.758 1cdc71 Reusing old log /Users/priteshraj/Downloads/Agent/chrome_profile/Default/shared_proto_db/000003.log 

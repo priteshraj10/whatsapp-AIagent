@@ -1,0 +1,3383 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Aria · Knowledge Graph</title>
+      <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
+      <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #0f172a; font-family: 'Inter', system-ui, sans-serif; color: #e2e8f0; height: 100vh; overflow: hidden; }
+        #header {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+          background: linear-gradient(90deg,#1e293b,#0f172a);
+          border-bottom: 1px solid #334155;
+          padding: 12px 24px; display: flex; align-items: center; gap: 20px;
+        }
+        #header h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; color: #00ffcc; white-space:nowrap; }
+        #header .stats { font-size: 13px; display:flex; gap: 12px; flex-wrap:wrap; }
+        #mynetwork { width: 100%; height: calc(100vh - 50px); margin-top: 50px; }
+        #legend {
+          position: fixed; bottom: 20px; right: 20px; z-index: 10;
+          background: #1e293bdd; border: 1px solid #334155; border-radius: 12px;
+          padding: 12px 16px; font-size: 12px; color: #94a3b8; line-height: 1.7;
+          backdrop-filter: blur(8px);
+        }
+        /* Style the vis.js tooltip */
+        div.vis-tooltip {
+          background: #1e293b !important;
+          border: 1px solid #334155 !important;
+          border-radius: 10px !important;
+          padding: 10px 14px !important;
+          box-shadow: 0 8px 32px #00000088 !important;
+          max-width: 300px !important;
+          font-size: 13px !important;
+          color: #e2e8f0 !important;
+          pointer-events: none !important;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="header">
+        <h1>⚡ Aria · Knowledge Graph</h1>
+        <div class="stats"><span style='color:#00ffcc'>★ 21 contacts</span>&nbsp;·&nbsp;<span style='color:#9ca3af'>● 45 concepts</span>&nbsp;·&nbsp;<span style='color:#64748b'>94 relationships</span></div>
+      </div>
+      <div id="mynetwork"></div>
+      <div id="legend"><b>Legend</b><br/><span style='color:#00ffcc'>★</span> Contact (hover for messages)<br/><span style='color:#6bcbff'>●</span> Concept / Place / Org<br/><hr style='border-color:#334155;margin:6px 0'/><b>Controls</b><br/>Scroll to zoom<br/>Drag to pan<br/>Click node to highlight<br/>Hover for details</div>
+      <script>
+        const nodes = new vis.DataSet([
+  {
+    "id": 0,
+    "label": "TestContact",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac TestContact</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Tell me about Python programming</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">I am doing great, thanks!</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hello there! How are you?</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 1,
+    "label": "Pritesh",
+    "title": "<b>Pritesh</b><br/><i>No messages yet</i>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 2,
+    "label": "Aanchna IIT Jammu",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Aanchna IIT Jammu</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">She is good. She is asking about you</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">I&#x27;m glad to hear she&#x27;s doing well. However, I&#x27;m just a computer program, so I do\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi! It&#x27;s great to see you again. How&#x27;s your weekend going so far?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Great, how about you?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">i&#x27;m doing well, thanks for asking! I&#x27;m always ready to chat and help with any to\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 3,
+    "label": "TCS",
+    "title": "<b>TCS</b>",
+    "color": {
+      "background": "#ff6b9d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 4,
+    "label": "Aanchna",
+    "title": "<b>Aanchna</b>",
+    "color": {
+      "background": "#ffd93d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 5,
+    "label": "IIT Jammu",
+    "title": "<b>IIT Jammu</b>",
+    "color": {
+      "background": "#6bcbff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 6,
+    "label": "General Motors account",
+    "title": "<b>General Motors account</b>",
+    "color": {
+      "background": "#c3ff6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 7,
+    "label": "Nvidia",
+    "title": "<b>Nvidia</b>",
+    "color": {
+      "background": "#ff9f6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 8,
+    "label": "Profound Discussions",
+    "title": "<b>Profound Discussions</b>",
+    "color": {
+      "background": "#d0b4ff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 9,
+    "label": "Facebook",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Facebook</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">You received a one-time passcode. For added security, you can only see it on you\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">You received a one-time passcode. For added security, you can only see it on you\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">You received a one-time passcode. For added security, you can only see it on you\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 10,
+    "label": "KreditBee",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac KreditBee</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">76 kB\nCongrats PRITESH RAJ! \n\nYour Credit Limit on your Business Loan has been i\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">76 kB\nCongrats PRITESH RAJ! \n\nYour Credit Limit on your Business Loan has been i\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">97 kB\nHi PRITESH RAJ, this Republic Day, invest in growth and long-term progress\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">97 kB\nHi PRITESH RAJ, this Republic Day, invest in growth and long-term progress\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">76 kB\nCongrats PRITESH RAJ! \n\nYour Credit Limit on your Business Loan has been i\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Pritesh Raj has received several loan offers from KBNBFC with increased credit l\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 11,
+    "label": "Pritesh Raj",
+    "title": "<b>Pritesh Raj</b><br/><i>No messages yet</i>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 12,
+    "label": "Rs. 30500",
+    "title": "<b>Rs. 30500</b>",
+    "color": {
+      "background": "#ff6b6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 13,
+    "label": "KBNBFC",
+    "title": "<b>KBNBFC</b>",
+    "color": {
+      "background": "#6bffb4",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 14,
+    "label": "FLAT 90% OFF on Processing Fee",
+    "title": "<b>FLAT 90% OFF on Processing Fee</b>",
+    "color": {
+      "background": "#ffb46b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 15,
+    "label": "Upto 100% OFF on Processing Fee",
+    "title": "<b>Upto 100% OFF on Processing Fee</b>",
+    "color": {
+      "background": "#6b9dff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 16,
+    "label": "FLT090",
+    "title": "<b>FLT090</b>",
+    "color": {
+      "background": "#ff6bff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 17,
+    "label": "SME100",
+    "title": "<b>SME100</b>",
+    "color": {
+      "background": "#ff6b9d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 18,
+    "label": "FLT100",
+    "title": "<b>FLT100</b>",
+    "color": {
+      "background": "#ffd93d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 19,
+    "label": "BLM100",
+    "title": "<b>BLM100</b>",
+    "color": {
+      "background": "#6bcbff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 20,
+    "label": "REPD26",
+    "title": "<b>REPD26</b>",
+    "color": {
+      "background": "#c3ff6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 21,
+    "label": "Devika Nair",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Devika Nair</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 22,
+    "label": "assistant",
+    "title": "<b>assistant</b>",
+    "color": {
+      "background": "#ff9f6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 23,
+    "label": "Karnika Kaggle GM",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Karnika Kaggle GM</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi! How&#x27;s your day going so far?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi! How&#x27;s your day going so far?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi! How&#x27;s your day going so far?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">It&#x27;s going well, thanks for asking! I&#x27;m always ready to chat and help with any q\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 24,
+    "label": "Karnika",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Karnika</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">54 kB\nI downloaded this image and gave this prompt \n6:13 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Looks so adorable</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">81 kB\n5:58 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Will explore it when I get some time</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">The Agentic terminal which I was talking about</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Warp: The Agentic Development Environment\nWarp is an AI agent platform that lets\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 25,
+    "label": "Kaggle",
+    "title": "<b>Kaggle</b>",
+    "color": {
+      "background": "#d0b4ff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 26,
+    "label": "tech advisor",
+    "title": "<b>tech advisor</b>",
+    "color": {
+      "background": "#ff6b6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 27,
+    "label": "funding pitch decks",
+    "title": "<b>funding pitch decks</b>",
+    "color": {
+      "background": "#6bffb4",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 28,
+    "label": "his team",
+    "title": "<b>his team</b>",
+    "color": {
+      "background": "#ffb46b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 29,
+    "label": "Akansha IIM C",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Akansha IIM C</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Are you single?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Voice call\nMake calls with the Mac app\n4:29 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Was missing you!</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Yes</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Awake?</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 30,
+    "label": "Akansha",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Akansha</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Are you single?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Voice call\nMake calls with the Mac app\n4:29 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Was missing you!</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Yes</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hi</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Awake?</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 31,
+    "label": "IIMC",
+    "title": "<b>IIMC</b>",
+    "color": {
+      "background": "#6b9dff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 32,
+    "label": "Antler",
+    "title": "<b>Antler</b>",
+    "color": {
+      "background": "#ff6bff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 33,
+    "label": "kaggle",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac kaggle</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">I&#x27;m actually here to help you with any questions or topics you&#x27;d like to discuss\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">I&#x27;m actually here to help you with any questions or topics you&#x27;d like to discuss\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">i appreciate your willingness to help.</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">i appreciate your willingness to help. I&#x27;m here to provide information and answe\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">i appreciate your willingness to help. I&#x27;m here to provide information and answe\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">i appreciate your willingness to help. I&#x27;m here to provide information and answe\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 34,
+    "label": "project",
+    "title": "<b>project</b>",
+    "color": {
+      "background": "#ff6b9d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 35,
+    "label": "pitch decks",
+    "title": "<b>pitch decks</b>",
+    "color": {
+      "background": "#ffd93d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 36,
+    "label": "kreditbee",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac kreditbee</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">77 kB\nHi PRITESH RAJ, Your Business Loan is APPROVED.\n\n\n\nDisburse it today and g\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">76 kB\nCongrats PRITESH RAJ! \n\nYour Credit Limit on your Business Loan has been i\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">76 kB\nCongrats PRITESH RAJ! \n\nYour Credit Limit on your Business Loan has been i\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">97 kB\nHi PRITESH RAJ, this Republic Day, invest in growth and long-term progress\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">97 kB\nHi PRITESH RAJ, this Republic Day, invest in growth and long-term progress\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">tail-inic-download97 kBHi PRITESH RAJ, this Republic Day, invest in growth and l\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 37,
+    "label": "business loan",
+    "title": "<b>business loan</b>",
+    "color": {
+      "background": "#6bcbff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 38,
+    "label": "mihir",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac mihir</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">191 kB\n11:30 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">211 kB\n11:21 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">157 kB\n11:19 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">250 bhj sakta h</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Hello\n9:39 PM\n9:42 PM\n9:43 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">What&#x27;s going on? You mentioned an issue, can you explain?</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 39,
+    "label": "Pritesh Raj (You)",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Pritesh Raj (You)</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Research Data Scientist - Madison, Wisconsin, United States\nCurrent Employees: I\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">#synthaticimagedetection #imagedetection #ai #machinelearning #computervision #d\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Pritesh_OneAuth_BackupCodes_2025-12-13\n75 B\n10:54 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">The application deadline for the Defence Research and Development Organisation (\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Breaking VC Bias: 10 Strategies for Non-Pedigree Founders | Abhijeet Goel posted\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Male Prompt\n\n\n\nMale Haircut Analysis + Image Generation Prompt (Nano Banana Pro \u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 40,
+    "label": "Cerebras",
+    "title": "<b>Cerebras</b>",
+    "color": {
+      "background": "#c3ff6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 41,
+    "label": "YouTube",
+    "title": "<b>YouTube</b>",
+    "color": {
+      "background": "#ff9f6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 42,
+    "label": "GitHub",
+    "title": "<b>GitHub</b>",
+    "color": {
+      "background": "#d0b4ff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 43,
+    "label": "Instagram",
+    "title": "<b>Instagram</b>",
+    "color": {
+      "background": "#ff6b6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 44,
+    "label": "OneAuth",
+    "title": "<b>OneAuth</b>",
+    "color": {
+      "background": "#6bffb4",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 45,
+    "label": "Sachin Chauhan",
+    "title": "<b>Sachin Chauhan</b>",
+    "color": {
+      "background": "#ffb46b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 46,
+    "label": "LinkedIn",
+    "title": "<b>LinkedIn</b>",
+    "color": {
+      "background": "#6b9dff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 47,
+    "label": "Fazlur Shah",
+    "title": "<b>Fazlur Shah</b>",
+    "color": {
+      "background": "#ff6bff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 48,
+    "label": "Mihir Patel",
+    "title": "<b>Mihir Patel</b>",
+    "color": {
+      "background": "#ff6b9d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 49,
+    "label": "Dr. Gaurav Bhoj",
+    "title": "<b>Dr. Gaurav Bhoj</b>",
+    "color": {
+      "background": "#ffd93d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 50,
+    "label": "Abhijeet Goel",
+    "title": "<b>Abhijeet Goel</b>",
+    "color": {
+      "background": "#6bcbff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 51,
+    "label": "Paisabazaar",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Paisabazaar</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Dear Pritesh Raj\n\n\n\nYour Good Credit Score makes you eligible for this Exclusive\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Dear Pritesh Raj\n\n\n\nYour Good Credit Score makes you eligible for this Exclusive\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Dear Pritesh Raj\n\n\n\nYour Good Credit Score makes you eligible for this Exclusive\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Dear Pritesh Raj\n\n\n\nCongratulations on becoming a part of the Paisabazaar Select\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Dear Pritesh Raj\n\n\n\nCongratulations on becoming a part of the Paisabazaar Select\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">[Image Attached] Dear Pritesh Raj\n\n\n\nCongratulations on becoming a part of the P\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 52,
+    "label": "10 Lakh",
+    "title": "<b>10 Lakh</b>",
+    "color": {
+      "background": "#c3ff6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 53,
+    "label": "Instant Funds",
+    "title": "<b>Instant Funds</b>",
+    "color": {
+      "background": "#ff9f6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 54,
+    "label": "Paperless Documentation",
+    "title": "<b>Paperless Documentation</b>",
+    "color": {
+      "background": "#d0b4ff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 55,
+    "label": "5 Lakh",
+    "title": "<b>5 Lakh</b>",
+    "color": {
+      "background": "#ff6b6b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 56,
+    "label": "Mihir",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Mihir</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Happy mahashivratri</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">145 kB\n8:57 AM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">191 kB\n11:30 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">211 kB\n11:21 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">157 kB\n11:19 PM</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">250 bhj sakta h</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 57,
+    "label": "ASSISTANT",
+    "title": "<b>ASSISTANT</b>",
+    "color": {
+      "background": "#6bffb4",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 58,
+    "label": "Priyanka",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Priyanka</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Good morning! Hope you&#x27;re having a great start to the weekend</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 59,
+    "label": "Priyanka ISRO",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac Priyanka ISRO</div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Good morning! Hope you&#x27;re having a great start to the weekend</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 60,
+    "label": "clear",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac clear</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">37 kB\n\u20b9150 added to your Cleartrip wallet \n\nMore  in your pocket. Less  on your \u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">37 kB\n\u20b9150 credited to your wallet. Check your updated balance.\nReply STOP to un\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">30 kB\nLast chance! The Travel Max Sale ends today\n\n Domestic flights from \u20b9999\n\n\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">26 kB\nYOU  save extra this Travel Max Sale!\n\nBook flights from \u20b9999 and get \u20b9150\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">36 kB\nNeed a sign?  Travel Max Sale is on! \n\n Flat 12% off on domestic flights\n\n\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">36 kB\nNeed a sign?  Travel Max Sale is on! \n\n Flat 12% off on domestic flights\n\n\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 61,
+    "label": "mihir sharma",
+    "title": "<div style=\"max-width:280px;font-family:system-ui;\"><div style=\"font-size:15px;font-weight:700;color:#00ffcc;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:6px;\">\ud83d\udcac mihir sharma</div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Kuch ni Sahil phone kiya tha kya?</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">haan, thoda der pehle message kiya tha, lekin abhi tak koi response nahi mila. K\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">Kaise jana ka soche ho re bc</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">kal milte hain, abhi raat ho gayi hai. Kaise jana hai, wo bhi kal soch lete hain\u2026</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#94a3b8;font-size:11px;\">\ud83e\uddd1 USER</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">100 rs bhj na kl dete h return</span></div><div style=\"margin-bottom:6px;\"><span style=\"color:#00ffcc;font-size:11px;\">\ud83e\udd16 ASSISTANT</span><br/><span style=\"color:#e2e8f0;font-size:13px;\">achha, thik hai. Main kal return kar dunga. Abhi ke liye raat ho gayi hai, kal m\u2026</span></div></div>",
+    "color": {
+      "background": "#00ffcc",
+      "border": "#ffffff55",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 17,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "star",
+    "size": 36,
+    "group": "contact"
+  },
+  {
+    "id": 62,
+    "label": "Mihir Sharma",
+    "title": "<b>Mihir Sharma</b>",
+    "color": {
+      "background": "#ffb46b",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 63,
+    "label": "Sahil",
+    "title": "<b>Sahil</b>",
+    "color": {
+      "background": "#6b9dff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 64,
+    "label": "a home",
+    "title": "<b>a home</b>",
+    "color": {
+      "background": "#ff6bff",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  },
+  {
+    "id": 65,
+    "label": "Happy Mahashivratri",
+    "title": "<b>Happy Mahashivratri</b>",
+    "color": {
+      "background": "#ff6b9d",
+      "border": "#ffffff22",
+      "highlight": {
+        "background": "#ffffff",
+        "border": "#ffffff"
+      }
+    },
+    "font": {
+      "color": "#ffffff",
+      "size": 13,
+      "bold": true,
+      "strokeWidth": 3,
+      "strokeColor": "#00000099"
+    },
+    "shape": "dot",
+    "size": 18,
+    "group": "concept"
+  }
+]);
+        const edges = new vis.DataSet([
+  {
+    "from": 0,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 2,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 3,
+    "label": "works at",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "label": "has a discussion with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 4,
+    "to": 5,
+    "label": "from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 6,
+    "label": "works on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 3,
+    "label": "WFH for",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 7,
+    "label": "planning to join",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 4,
+    "to": 8,
+    "label": "host of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 8,
+    "label": "guest on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "label": "discusses AI with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "label": "discusses career growth with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "label": "borrows a book from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "label": "agrees to meet",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "label": "uses Zoom with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 9,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 10,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 12,
+    "label": "has a credit limit of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 13,
+    "label": "has received loan offers from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 14,
+    "label": "is eligible for",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 15,
+    "label": "is eligible for",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 16,
+    "label": "can use code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 17,
+    "label": "can use code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 18,
+    "label": "can use code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 19,
+    "label": "can use code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 20,
+    "label": "can use code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 21,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 21,
+    "to": 22,
+    "label": "contacts",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 23,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 24,
+    "to": 25,
+    "label": "works at",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 24,
+    "label": "consults with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 24,
+    "to": 1,
+    "label": "advises",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 26,
+    "label": "added Karnika as",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 24,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 27,
+    "label": "mentions Karnika's name without consent",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 27,
+    "label": "removes Karnika's name from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 28,
+    "label": "adds Karnika as tech advisor to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 29,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 31,
+    "label": "studies at",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 32,
+    "label": "is associated with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 33,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 24,
+    "label": "consults",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 24,
+    "to": 34,
+    "label": "advised Pritesh on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 1,
+    "to": 35,
+    "label": "removed Karnika's name from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 24,
+    "to": 35,
+    "label": "requested Pritesh to remove her name from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 36,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 13,
+    "label": "has a business loan from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 37,
+    "label": "uses KreditBee for",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 13,
+    "to": 11,
+    "label": "offers business loan to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 10,
+    "to": 11,
+    "label": "offers credit limit to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 17,
+    "label": "is eligible for up to 100% OFF on processing fee with code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 18,
+    "label": "is eligible for up to 100% OFF on processing fee with code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 16,
+    "label": "is eligible for up to 90% OFF on processing fee with code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 19,
+    "label": "is eligible for up to 100% OFF on processing fee with code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 20,
+    "label": "is eligible for up to 100% OFF on processing fee with code",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 38,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 39,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 40,
+    "label": "contacts",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 41,
+    "label": "contacts",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 42,
+    "label": "contacts",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 43,
+    "label": "contacts",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 44,
+    "label": "works on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 45,
+    "to": 46,
+    "label": "posted on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 47,
+    "to": 46,
+    "label": "posted on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 48,
+    "to": 46,
+    "label": "posted on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 49,
+    "to": 46,
+    "label": "posted on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 50,
+    "to": 46,
+    "label": "posted on",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 51,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 51,
+    "label": "offered a pre-approved personal loan by",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 51,
+    "label": "has a good credit score",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 51,
+    "to": 52,
+    "label": "offers loan up to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 51,
+    "to": 53,
+    "label": "provides",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 51,
+    "to": 54,
+    "label": "provides",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 11,
+    "to": 55,
+    "label": "eligible for pre-approved personal loan of up to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 56,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "is contacted by",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "met",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "has friendship subscription with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "received congratulations from",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "wished happy new year to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "wished happy diwali to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "had voice call with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "answered questions of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 30,
+    "to": 57,
+    "label": "provided help to",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 58,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 59,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 60,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 61,
+    "to": 1,
+    "label": "contact of",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 62,
+    "to": 63,
+    "label": "contacts",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 62,
+    "to": 63,
+    "label": "discussed with",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 62,
+    "to": 63,
+    "label": "plans to meet",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 62,
+    "to": 64,
+    "label": "lives in",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  },
+  {
+    "from": 62,
+    "to": 65,
+    "label": "wishes",
+    "arrows": "to",
+    "color": {
+      "color": "#6b728088",
+      "highlight": "#ffffff"
+    },
+    "font": {
+      "color": "#9ca3af",
+      "size": 11,
+      "align": "middle"
+    },
+    "smooth": {
+      "type": "curvedCW",
+      "roundness": 0.15
+    }
+  }
+]);
+        const container = document.getElementById('mynetwork');
+        const options = {
+          physics: {
+            solver: 'forceAtlas2Based',
+            forceAtlas2Based: {
+              gravitationalConstant: -80,
+              centralGravity: 0.002,
+              springLength: 200,
+              springConstant: 0.06,
+              damping: 0.5,
+              avoidOverlap: 1.0,
+            },
+            stabilization: { iterations: 400, fit: true },
+          },
+          interaction: {
+            hover: true,
+            tooltipDelay: 100,
+            zoomView: true,
+            navigationButtons: false,
+          },
+          edges: { width: 1.5, selectionWidth: 3 },
+          nodes: { borderWidth: 2 },
+        };
+        const network = new vis.Network(container, { nodes, edges }, options);
+        network.once('stabilizationIterationsDone', () => { network.fit({ animation: true }); });
+      </script>
+    </body>
+    </html>
