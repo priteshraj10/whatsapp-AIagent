@@ -1,10 +1,10 @@
-# 🤖 WhatsApp AI Agent
+# WhatsApp AI Agent
 
 An autonomous, multi-layered AI agent that manages WhatsApp conversations with human-like intelligence — powered by **Groq** (primary) and **Gemini** (fallback).
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ```bash
 git clone https://github.com/priteshraj10/whatsapp-AIagent.git
@@ -14,15 +14,15 @@ chmod +x start.sh
 ```
 
 That's it. `start.sh` handles **everything automatically**:
-- ✅ Creates a Python virtual environment
-- ✅ Installs all dependencies from `requirements.txt`
-- ✅ Installs Playwright + Chromium browser
-- ✅ Prompts you to enter your API keys and saves them to `.env`
-- ✅ Lets you choose what to launch
+- Creates a Python virtual environment
+- Installs all dependencies from `requirements.txt`
+- Installs Playwright + Chromium browser
+- Prompts you to enter your API keys and saves them to `.env`
+- Lets you choose what to launch
 
 ---
 
-## 🔑 API Keys Required
+## API Keys Required
 
 | Provider | Purpose | Get Key |
 |---|---|---|
@@ -39,14 +39,14 @@ When you run `./start.sh`, it will ask you to enter these keys interactively. Th
 
 ---
 
-## 🧠 How It Works
+## How It Works
 
 The agent runs a **13-phase cognitive cycle** every loop iteration:
 
 ```
-Perceive → Classify → Bootstrap → SilencePolicy → BusinessGate
-→ GoalEval → Strategize → ContextAnalyze → Plan
-→ MessageGuard → Execute → Reflect → Maintain
+Perceive -> Classify -> Bootstrap -> SilencePolicy -> BusinessGate
+-> GoalEval -> Strategize -> ContextAnalyze -> Plan
+-> MessageGuard -> Execute -> Reflect -> Maintain
 ```
 
 Each phase is handled by a dedicated cognitive layer:
@@ -64,7 +64,7 @@ Each phase is handled by a dedicated cognitive layer:
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 whatsapp-AIagent/
@@ -76,14 +76,14 @@ whatsapp-AIagent/
 ├── whatsapp/            # DOM reader & CSS selectors
 ├── scripts/             # Utilities (knowledge graph, contact discovery)
 ├── persona/             # Agent personality config (YAML + skills)
-├── start.sh             # One-click setup & launcher ← START HERE
+├── start.sh             # One-click setup & launcher  <-- START HERE
 ├── run.py               # CLI entry point
 └── requirements.txt     # Python dependencies
 ```
 
 ---
 
-## 🔧 Manual Usage
+## Manual Usage
 
 If you prefer to run things manually:
 
@@ -108,7 +108,7 @@ python run.py --contact "Contact Name" --debug-layers --verbose
 
 ---
 
-## 🌐 Knowledge Graph
+## Knowledge Graph
 
 Visualize what the agent has learned about your contacts:
 
@@ -116,22 +116,22 @@ Visualize what the agent has learned about your contacts:
 python scripts/seed_and_view_graph.py
 ```
 
-This generates an interactive vis.js graph (`knowledge_map.html`) and opens it in your browser.
+This generates an interactive vis.js graph and opens it in your browser.
 
 ---
 
-## 📅 Google Calendar Integration (Optional)
+## Google Calendar Integration (Optional)
 
 1. Enable Google Calendar API in [Google Cloud Console](https://console.cloud.google.com)
-2. Create OAuth2 credentials → Desktop App
+2. Create OAuth2 credentials (Desktop App)
 3. Download `credentials.json` to the project root
 4. First run opens a browser for OAuth consent — token is cached automatically
 
-> Without credentials, the agent uses a local JSON calendar file.
+Without credentials, the agent uses a local JSON calendar file.
 
 ---
 
-## 📋 Requirements
+## Requirements
 
 - Python 3.9+
 - A Groq API key (free tier available)
