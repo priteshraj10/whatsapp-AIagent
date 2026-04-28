@@ -114,28 +114,35 @@ echo -ne "\n   Enter choice [1/2/3/4]: "
 read -r RUN_CHOICE
 
 case "$RUN_CHOICE" in
-    1)
-        echo -ne "\n   ${BOLD}Enter the WhatsApp contact name to monitor:${RESET} "
-        read -r CONTACT
-        echo ""
-        echo -e "${GREEN}Starting agent for \"$CONTACT\"...${RESET}"
-        python run.py --contact "$CONTACT"
-        ;;
-    2)
-        echo ""
-        echo -e "${GREEN}Seeding Knowledge Graph...${RESET}"
-        python scripts/seed_and_view_graph.py
-        ;;
-    3)
-        echo ""
-        echo -e "${GREEN}Seeding Knowledge Graph...${RESET}"
-        python scripts/seed_and_view_graph.py
+    1|3)
+        echo -ne "\n   ${BOLD}Run in headless mode?${RESET} (browser runs invisibly in background)"
+        echo -ne "\n   ${BOLD}[Y/n]:${RESET} "
+        read -r HEADLESS_CHOICE
+
+        HEADFUL_FLAG=""
+        if [[ "$HEADLESS_CHOICE" =~ ^[Nn]$ ]]; then
+            HEADFUL_FLAG="--headful"
+            echo -e "   ${YELLOW}→ Browser window will be visible.${RESET}"
+        else
+            echo -e "   ${GREEN}→ Running headless (no browser window).${RESET}"
+        fi
+
+        if [ "$RUN_CHOICE" = "3" ]; then
+            echo ""
+            echo -e "${GREEN}Seeding Knowledge Graph...${RESET}"
+            python scripts/seed_and_view_graph.py
+        fi
 
         echo -ne "\n   ${BOLD}Enter the WhatsApp contact name to monitor:${RESET} "
         read -r CONTACT
         echo ""
         echo -e "${GREEN}Starting agent for \"$CONTACT\"...${RESET}"
-        python run.py --contact "$CONTACT"
+        python run.py --contact "$CONTACT" $HEADFUL_FLAG
+        ;;
+    2)
+        echo ""
+        echo -e "${GREEN}Seeding Knowledge Graph...${RESET}"
+        python scripts/seed_and_view_graph.py
         ;;
     4)
         echo -e "${YELLOW}Exiting. Run ${BOLD}./start.sh${RESET}${YELLOW} again when ready.${RESET}"
@@ -145,3 +152,4 @@ case "$RUN_CHOICE" in
         exit 1
         ;;
 esac
+
