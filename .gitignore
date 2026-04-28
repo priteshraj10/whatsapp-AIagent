@@ -1,0 +1,18 @@
+.env
+__pycache__/
+venv/
+screenshots/
+context/
+user_data/
+fb_user_data/
+whatsapp_user_data/
+
+# Auto-generated output files
+*.html
+*.png
+*.jpg
+chrome_profile/
+data/
+profiles/
+*.db
+
